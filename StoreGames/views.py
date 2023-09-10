@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import Usuario
 
 # Create your views here.
 
@@ -49,3 +50,7 @@ def panel_control_admi(request):
 #vista para ingresar contenido
 def ingresarcontenido(request):
     return render(request,'StoreGames/html/ingresarcontenido.html')
+
+def perfilusuario(request):
+    return render(request,'StoreGames/html/usuario_perfil.html')
+
