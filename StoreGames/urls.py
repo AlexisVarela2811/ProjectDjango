@@ -1,6 +1,7 @@
 from django.urls import path
 #importo
-from.views import index,index_admin,aventura,carreras,deportes,rol,shooter,login,recuperar,panel_control_admi,ingresarcontenido,registro
+from.views import index,index_admin,aventura,carreras,deportes,rol,shooter,login,recuperar,panel_control_admi,perfilusuario,ingresarcontenido,registro
+
 urlpatterns = [
     path('',index,name="index"),
     path('index_admin/',index_admin,name="index_admin"),
@@ -15,4 +16,5 @@ urlpatterns = [
     path('login/',login,name="login"),
     path('ingresarcontenido/',ingresarcontenido,name="ingresarcontenido"),
     path('deportes/',deportes,name="deportes"),
+    path('usuario_perfil/',perfilusuario,name="usuario_perfil")
     ]

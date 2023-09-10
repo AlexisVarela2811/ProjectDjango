@@ -19,5 +19,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('StoreGames.urls'))
+    path('',include('StoreGames.urls')) 
 ]
+
+admin.site.site_header = "Administracion StoreGames"
+admin.site.site_header = "Modulos de administracion"
