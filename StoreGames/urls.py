@@ -1,5 +1,5 @@
 from django.urls import path
-#importo
+#importo views
 from.views import index,index_admin,aventura,carreras,deportes,rol,shooter,login,recuperar,panel_control_admi,perfilusuario,ingresarcontenido,registro
 
 urlpatterns = [

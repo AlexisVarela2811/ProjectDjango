@@ -15,6 +15,7 @@ formulario.addEventListener('submit', e => {
         document.querySelectorAll(`.grupo__all`).forEach((item) => {
             item.classList.remove('formulario__grupo-correcto')
         })
+        formulario.submit()
     }
 
     console.log('hola')
