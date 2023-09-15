@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--Cargo static de py-->
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Games | SHOOTER</title>
+    <link rel="stylesheet" href="{% static 'StoreGames/css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light custom-navbar-bg">
+  <div class="container">
+      <a class="navbar-brand" href="{% url 'index' %}">
+          <h1 class="logo">Store Games</h1>
+      </a>
+      <!-- Botón para dispositivos pequeños -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Contenido del Navbar -->
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link registro" href="{% url 'aventura' %}">Aventura</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link registro" href="{% url 'shooter' %}">Shooter</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link registro" href="{% url 'carreras' %}">Carreras</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link registro" href="{% url 'deportes' %}">Deportes</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link registro" href="{% url 'rol' %}">Rol</a>
+              </li>
+          </ul>
+      </div>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link registro" href="{% url 'login' %}">Inicio de Sesión</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav>
+
+
+    <div class="container">
+        <h2 class="txt text-center mt-5">SHOOTER</h2>
+
+        <div class="row">
+            <div class="col-md-6 mt-4">
+                <div class="game gameSpacing">
+                    <img src="{% static 'StoreGames/img/mw2.jpg' %}" alt="adventure camp" class="img-fluid">
+                    <p class="gametxt">Call of Duty: Modern Warfare 2</p>
+                    <p class="gametxt">
+                        En Call of Duty®: Modern Warfare® II, los jugadores se verán inmersos en un conflicto
+                        a escala global sin precedentes que incluye el regreso de Operadores icónicos de la fuerza operativa 141.
+                        Desde operaciones tácticas de infiltración a pequeña escala hasta misiones altamente secretas, 
+                        los jugadores se desplegarán con amigos en una experiencia inmersiva.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 mt-4">
+                <div class="game">
+                    <img src="{% static 'StoreGames/img/cs2.jpg' %}" alt="adventure camp" class="img-fluid">
+                    <p class="gametxt">Counter Strike 2</p>
+                    <p class="gametxt">
+                        Counter‑Strike 2 es el avance técnico más importante en la historia de Counter‑Strike y nos permitirá seguir 
+                        incorporando características y actualizaciones durante muchos años. Este verano, cuando salga oficialmente, 
+                        desvelaremos todas las nuevas características del juego, pero el camino hacia Counter‑Strike 2 empieza hoy con la prueba limitada,
+                        disponible para una selección de jugadores de CS:GO.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'index' %}" class="boton_volver d-block text-center mt-4">BACK</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+
