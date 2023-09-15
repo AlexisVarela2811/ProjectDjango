@@ -9,8 +9,7 @@ urlpatterns = [
     path('deportes/', views.deportes, name="deportes"),
     path('rol/', views.rol, name="rol"),
     path('shooter/', views.shooter, name="shooter"),
-    path('registro/', views.registro, name="registro"),  # Esta vista muestra el formulario de registro
-   
+    path('registro/', views.registro, name="registro"), 
     path('recuperar/', views.recuperar, name="recuperar"),
     path('panel_control_admi/', views.panel_control_admi, name="panel_control_admi"),
     path('login/', views.login, name="login"),
