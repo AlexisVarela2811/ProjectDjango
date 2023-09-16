@@ -8,7 +8,7 @@ class Usuario(models.Model):
     correo = models.EmailField(unique=True)
     usuario = models.CharField(max_length=16, unique=True)
     contrasena = models.CharField(max_length=12)
-    fechanacimiento =  models.CharField(max_length=8)
+    fechanacimiento = models.DateField() 
     direccion = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
