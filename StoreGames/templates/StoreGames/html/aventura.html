@@ -9,59 +9,64 @@
     <title>Store Games | AVENTURA</title>
     <link rel="stylesheet" href="{% static 'StoreGames/css/style.css' %}">
     <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-    crossorigin="anonymous"
-  />
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous"
+    />
 </head>
 
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light custom-navbar-bg">
-  <div class="container">
-      <a class="navbar-brand" href="{% url 'index' %}">
-          <h1 class="logo">Store Games</h1>
-      </a>
-      <!-- Botón para dispositivos pequeños -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <!-- Contenido del Navbar -->
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-          <ul class="navbar-nav">
-              <li class="nav-item">
-                  <a class="nav-link registro" href="{% url 'aventura' %}">Aventura</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link registro" href="{% url 'shooter' %}">Shooter</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link registro" href="{% url 'carreras' %}">Carreras</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link registro" href="{% url 'deportes' %}">Deportes</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link registro" href="{% url 'rol' %}">Rol</a>
-              </li>
-          </ul>
-      </div>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav">
-              <li class="nav-item">
-                  <a class="nav-link registro" href="{% url 'login' %}">Inicio de Sesión</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
-              </li>
-          </ul>
-      </div>
-  </div>
-</nav>
-   
-
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light custom-navbar-bg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <h1 class="logo">Store Games</h1>
+            </a>
+            <!-- Botón para dispositivos pequeños -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Contenido del Navbar -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link registro" href="{% url 'aventura' %}">Aventura</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link registro" href="{% url 'shooter' %}">Shooter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link registro" href="{% url 'carreras' %}">Carreras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link registro" href="{% url 'deportes' %}">Deportes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link registro" href="{% url 'rol' %}">Rol</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link registro" href="{% url 'logout' %}">Cerrar sesión</a>
+                            <p class="nombre-usuario">Bienvenido, {{ user.username }}</p>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link registro" href="{% url 'login' %}">Inicio de Sesión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <h2 class="txtaventura">AVENTURA</h2>
 
@@ -69,27 +74,25 @@
         <div class="row">
             <div class="col-md-6 col-12">
                 <div class="game gameSpacing">
-                    <img src="{% static 'StoreGames/img/tomraider.jpg' %}" alt="adventure camp"class="img-fluid">
+                    <img src="{% static 'StoreGames/img/tomraider.jpg' %}" alt="adventure camp" class="img-fluid">
                     <p class="gametxt">Tom Raider</p>
-                    <p class="gametxt">Tomb Raider relata los intensos y conflictivos orígenes de Lara Croft y
-                        su transformación de joven asustadiza a endurecida superviviente. Lara, que solo cuenta con
-                        sus instintos y su habilidad para superar los límites de la resistencia humana, tendrá que
-                        aclarar
+                    <p class="gametxt">Tomb Raider relata los intensos y conflictivos orígenes de Lara Croft y su
+                        transformación de joven asustadiza a endurecida superviviente. Lara, que solo cuenta con sus
+                        instintos y su habilidad para superar los límites de la resistencia humana, tendrá que aclarar
                         la historia tenebrosa de una isla olvidada para escapar de su acoso implacable. Descárgate el
                         tráiler Turning Point para ver el comienzo de la aventura legendaria de Lara.
                     </p>
                 </div>
             </div>
-    
+
             <div class="col-md-6 col-12">
                 <div class="game">
-                    <img src="{% static 'StoreGames/img/thewitcher.jpg' %}" alt="adventure camp"class="img-fluid">
+                    <img src="{% static 'StoreGames/img/thewitcher.jpg' %}" alt="adventure camp" class="img-fluid">
                     <p class="gametxt">The Witcher</p>
                     <p class="gametxt">The Witcher Adventure Game es una adaptación digital del juego de mesa de CD
-                        PROJEKT RED
-                        ambientado en el brutal universo de fantasía del cazador de monstruos Geralt de Rivia.
-                        Recorre el mundo de The Witcher, recreado a la perfección, y completa una serie de misiones,
-                        como dar caza a bestias mortíferas, resolver misterios ancestrales y mucho más.
+                        PROJEKT RED ambientado en el brutal universo de fantasía del cazador de monstruos Geralt de
+                        Rivia. Recorre el mundo de The Witcher, recreado a la perfección, y completa una serie de
+                        misiones, como dar caza a bestias mortíferas, resolver misterios ancestrales y mucho más.
                     </p>
                 </div>
             </div>
@@ -98,11 +101,8 @@
 
     <a href="{% url 'index' %}" class="boton_volver d-block text-center mt-4">BACK</a>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 
 </html>
