@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User 
 from django.db import IntegrityError 
 from django.contrib.auth import login
-
+from django.contrib.auth.decorators import login_required
 
 from datetime import datetime
 # Create your views here.
@@ -45,6 +45,9 @@ def rol(request):
 def shooter(request):
     return render(request,'StoreGames/html/shooter.html')
 
+#vista para ver perfil
+def perfilvisualizar(request):
+    return render(request,'StoreGames/html/ver_perfil.html')
 
 
 #vista para registro
@@ -59,18 +62,18 @@ def registro(request):
         fechanacimiento = request.POST['fechanacimiento']
         direccion = request.POST['direccion']
 
-        # Verificar si ya existe un usuario con el mismo correo o nombre de usuario
+      
         if User.objects.filter(email=correo).exists() or User.objects.filter(username=user).exists():
             error_message = "Usuario y/o correo ya registrados."
             return render(request, 'StoreGames/html/registro.html', {'error_message': error_message})
 
-        # Si no existe un usuario con el mismo correo o nombre de usuario, crea uno nuevo
+       
         nuevo_usuario = User.objects.create_user(username=user, email=correo, password=password)
         nuevo_usuario.first_name = nombre
         nuevo_usuario.last_name = apellido
         nuevo_usuario.save()
 
-        # Iniciar sesión al usuario recién registrado
+       
         login(request, nuevo_usuario)
 
      
@@ -95,7 +98,7 @@ def ingresarcontenido(request):
 def perfilusuario(request):
     return render(request,'StoreGames/html/usuario_perfil.html')
 
-
+#vista para ingresar
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -113,3 +116,11 @@ def login_view(request):
             return render(request, 'StoreGames/html/login.html', {'error_message': error_message})
 
     return render(request, 'StoreGames/html/login.html')
+
+
+#vista para ver perfil
+
+@login_required
+def ver_perfil(request):
+    usuario = request.user
+    return render(request, 'StoreGames/html/ver_perfil.html', {'usuario': usuario})

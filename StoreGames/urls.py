@@ -19,4 +19,7 @@ urlpatterns = [
     path('ingresarcontenido/', views.ingresarcontenido, name="ingresarcontenido"),
     path('usuario_perfil/', views.perfilusuario, name="usuario_perfil"),
     path('login/', views.login_view, name='login'),
+    path('ver_perfil/', views.ver_perfil, name='ver_perfil'),
+    path('perfilvisualizar/', views.perfilvisualizar, name='perfilvisualizar'),
+    
 ]
