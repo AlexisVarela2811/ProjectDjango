@@ -46,24 +46,29 @@
             </ul>
         </div>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'logout' %}">Cerrar sesión</a>
-                        <p class="nombre-usuario">Bienvenido, {{ user.username }} </p>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link registro" href="{% url 'ver_perfil' %}">Perfil</a>
-                  </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'login' %}">Inicio de Sesión</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
-                    </li>
-                {% endif %}
-            </ul>
+          <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <p class="pt-2 nombre-usuario h6">Bienvenido, {{ user.username }}</p>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link registro" href="{% url 'editarperfil' %}">Editar Perfil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link registro" href="{% url 'cambio_contra' %}">Cambio de Contraseña</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link registro" href="{% url 'logout' %}">Cerrar sesión</a>
+            </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'loginc' %}">Inicio de Sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
+                </li>
+            {% endif %}
+        </ul>
         </div>
     </div>
 </nav>

@@ -46,7 +46,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
               <li class="nav-item">
-                  <a class="nav-link registro" href="{% url 'login' %}">Inicio de Sesión</a>
+                  <a class="nav-link registro" href="{% url 'loginc' %}">Inicio de Sesión</a>
               </li>
               <li class="nav-item">
                   <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
@@ -62,7 +62,7 @@
             <div>
                 <h1 class="txtregistro">Registro</h1>
             </div>
-            <form action="{% url 'registro' %}" method="post" enctype="multipart/form-data" id="formulario1">
+            <form method="post" action="{% url 'registrar_usuario' %}" id="formulario1">
                 {% csrf_token %}
                 
                 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
@@ -120,17 +120,7 @@
                         class="form-control">
                     <p class="form-control__error-txt d-none mt-2">Ambas contraseñas deben ser iguales</p>
                 </div>
-                <div class="mb-3 grupo__all" id="grupo__fechanacimiento">
-                    <label class="form-label label-nombre"for="fechanacimiento">Fecha de nacimiento</label>
-                    <input class="form-control" type="date" id="fechanacimiento" name="fechanacimiento" required>
-                    <p class="form-control__error-txt d-none mt-2">No puedes tener menos de 13 años para registrarte en el sitio web.</p>
-                </div>
-                <div class="mb-3 grupo__all" id="grupo__direccion">
-                    <label class="form-label label-nombre" for="direccion">Dirección de despacho</label>
-                    <input class="form-control" type="text" id="direccion" name="direccion"
-                        placeholder="Ingrese dirección de despacho">
-                    <p class="form-control__error-txt d-none mt-2">Dirección debe contar con nombre de calle, pasaje o avenida y # con número de domicilio.</p>
-                </div>
+
 
                 <div class="formulario__mensaje-error d-none" id="formulario__mensaje-error">
                     <p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
@@ -154,12 +144,13 @@
     crossorigin="anonymous"></script>
 
 <script>
-    {% if error_message %}
+    var error_message = "{{ error_message|escapejs }}";
+    if (error_message) {
         $(document).ready(function () {
-            $('#error_message').text("{{ error_message }}");
+            $('#error_message').text(error_message);
             $('#errorModal').modal('show');
         });
-    {% endif %}
+    }
 </script>
 <script src="{% static 'StoreGames/js/validaciones.js' %}"></script>
 </body>

@@ -1,15 +1,48 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.utils import timezone
 
-# Create your models here.
+class UsuarioManager(BaseUserManager):
+    def create_user(self, username, email, password=None):
+        if not email:
+            raise ValueError('El campo Email es obligatorio')
+        usuario = self.model(
+            username=username,
+            email=self.normalize_email(email),
+        )
+        usuario.set_password(password)
+        usuario.save(using=self._db)
+        return usuario
 
-class Usuario(models.Model):
+    def create_superuser(self, username, email, password=None):
+        usuario = self.create_user(
+            username=username,
+            email=email,
+            password=password,
+        )
+        usuario.is_superuser = True
+        usuario.is_staff = True
+        usuario.save(using=self._db)
+        return usuario
+
+    # Implementa el método get_by_natural_key
+    def get_by_natural_key(self, username):
+        return self.get(username=username)
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=16, unique=True)
+    email = models.EmailField(unique=True)
     nombre = models.CharField(max_length=255)
     apellidos = models.CharField(max_length=255)
-    correo = models.EmailField(unique=True)
-    usuario = models.CharField(max_length=16, unique=True)
-    contrasena = models.CharField(max_length=12)
-    fechanacimiento = models.DateField() 
-    direccion = models.CharField(max_length=255, blank=True, null=True)
+    # Otros campos de tu modelo
 
-    def __str__(self):
-        return self.nombre
+    # Especifica aquí cuál es el campo que se utilizará como nombre de usuario
+    USERNAME_FIELD = 'username'
+
+    # Especifica aquí los campos que deben ser requeridos al crear un superusuario
+    REQUIRED_FIELDS = ['email', 'nombre', 'apellidos']
+
+    # Asigna el gestor personalizado a tu modelo
+    objects = UsuarioManager()
+
+    # Resto de campos y métodos de tu modelo

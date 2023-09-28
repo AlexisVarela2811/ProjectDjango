@@ -1,126 +1,187 @@
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User 
-from django.db import IntegrityError 
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
+from .models import Usuario
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 
-from datetime import datetime
-# Create your views here.
 
-# vista para index principal 
+
+
 def index(request):
-    return render(request,'StoreGames/index.html')
+    return render(request, 'StoreGames/index.html')
 
-# vista de cierre sesion
 def cierresesion(request):
-    return render(request,'StoreGames/html/cierresesion.html')
+    return render(request, 'StoreGames/html/cierresesion.html')
 
-# vista de cierre sesion
 def bienvenida(request):
-    return render(request,'StoreGames/html/bienvenida.html')
-    
+    return render(request, 'StoreGames/html/bienvenida.html')
 
-#vista para index admin
 def index_admin(request):
-    return render(request,'StoreGames/index_admin.html')
+    return render(request, 'StoreGames/index_admin.html')
 
-#vista para aventura
 def aventura(request):
-    return render(request,'StoreGames/html/aventura.html')
+    return render(request, 'StoreGames/html/aventura.html')
 
-#vista para carreras
 def carreras(request):
-    return render(request,'StoreGames/html/carreras.html')
+    return render(request, 'StoreGames/html/carreras.html')
 
-#vista para deportes
 def deportes(request):
-    return render(request,'StoreGames/html/deportes.html')
+    return render(request, 'StoreGames/html/deportes.html')
 
-#vista para rol
 def rol(request):
-    return render(request,'StoreGames/html/rol.html')
+    return render(request, 'StoreGames/html/rol.html')
 
-#vista para shooter
 def shooter(request):
-    return render(request,'StoreGames/html/shooter.html')
+    return render(request, 'StoreGames/html/shooter.html')
 
-#vista para ver perfil
-def perfilvisualizar(request):
-    return render(request,'StoreGames/html/ver_perfil.html')
+def editar(request):
+    return render(request, 'StoreGames/html/editar_perfil.html')
+
+def loginc(request):
+    return render(request, 'StoreGames/html/login.html')
+
+def recuperar(request):
+    return render(request, 'StoreGames/html/recuperar.html')
+
+def panel_control_admi(request):
+    return render(request, 'StoreGames/html/panel_control_admi.html')
+
+def ingresarcontenido(request):
+    return render(request, 'StoreGames/html/ingresarcontenido.html')
 
 
-#vista para registro
 def registro(request):
+    return render(request, 'StoreGames/html/registro.html')
+
+def cambio_contra(request):
+    return render(request, 'StoreGames/html/cambio_contrasena.html')
+
+
+@login_required
+def editar_perfil(request):
     if request.method == 'POST':
-        # Obtén los datos del formulario
+        usuario = request.user
         nombre = request.POST['nombre']
-        apellido = request.POST.get('apellidos')
-        correo = request.POST['correo']
-        user = request.POST['user']
+        apellidos = request.POST['apellidos']
+        email = request.POST['email']
+        nuevo_username = request.POST['usuario']
+
+        try:
+            # Verificar si el usuario o el correo ya existen
+            existing_user = Usuario.objects.exclude(pk=usuario.pk).filter(username=nuevo_username).exists()
+            existing_email = Usuario.objects.exclude(pk=usuario.pk).filter(email=email).exists()
+
+            if existing_user:
+                error_message = "El nombre de usuario ya está en uso. Por favor, elige otro."
+            elif existing_email:
+                error_message = "El correo electrónico ya está en uso. Por favor, utiliza otro."
+            else:
+                # Actualizar los datos del usuario
+                usuario.username = nuevo_username
+                usuario.nombre = nombre
+                usuario.apellidos = apellidos
+                usuario.email = email
+                usuario.save()
+                messages.success(request, 'Perfil actualizado exitosamente.')
+                return redirect('index')
+        except IntegrityError as e:
+            error_message = "Ha ocurrido un error durante la actualización. Por favor, inténtalo nuevamente."
+
+        messages.error(request, error_message)
+
+    return render(request, 'StoreGames/html/editar_perfil.html')
+
+
+@login_required
+def cambiar_contrasena(request):
+    if request.method == 'POST':
+        usuario = request.user
+        contrasena_antigua = request.POST['contrasena_antigua']
+        nueva_contrasena = request.POST['nueva_contrasena']
+        verificacion_contrasena = request.POST['verificacion_contrasena']
+
+        try:
+            # Verificar la contraseña antigua antes de cambiarla
+            if usuario.check_password(contrasena_antigua):
+                # Verificar si la nueva contraseña y la verificación coinciden
+                if nueva_contrasena == verificacion_contrasena:
+                    usuario.set_password(nueva_contrasena)
+                    usuario.save()
+                    update_session_auth_hash(request, usuario)  # Actualizar la sesión para evitar cierres de sesión
+                    messages.success(request, 'Contraseña cambiada exitosamente.')
+                    return redirect('cambiar_contrasena')
+                else:
+                    error_message = "Las contraseñas no coinciden."
+            else:
+                error_message = "La contraseña antigua no es válida."
+        except IntegrityError as e:
+            error_message = "Ha ocurrido un error al cambiar la contraseña. Por favor, inténtalo nuevamente."
+
+        messages.error(request, error_message)
+
+    return render(request, 'StoreGames/html/cambio_contrasena.html')
+
+
+
+
+
+
+
+
+
+#VISTA DE REGISTRAR USUARIO
+def registrar_usuario(request):
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        apellidos = request.POST['apellidos']
+        email = request.POST['correo']
+        username = request.POST['user']
         password = request.POST['pass']
-        fechanacimiento = request.POST['fechanacimiento']
-        direccion = request.POST['direccion']
-
-      
-        if User.objects.filter(email=correo).exists() or User.objects.filter(username=user).exists():
-            error_message = "Usuario y/o correo ya registrados."
-            return render(request, 'StoreGames/html/registro.html', {'error_message': error_message})
-
-       
-        nuevo_usuario = User.objects.create_user(username=user, email=correo, password=password)
-        nuevo_usuario.first_name = nombre
-        nuevo_usuario.last_name = apellido
-        nuevo_usuario.save()
-
-       
-        login(request, nuevo_usuario)
-
-     
-        return redirect('bienvenida')
-
+        
+        try:
+            # Verificar si el usuario o el correo ya existen
+            existing_user = Usuario.objects.filter(username=username).exists()
+            existing_email = Usuario.objects.filter(email=email).exists()
+            
+            if existing_user:
+                error_message = "El nombre de usuario ya está en uso. Por favor, elige otro."
+            elif existing_email:
+                error_message = "El correo electrónico ya está en uso. Por favor, utiliza otro."
+            else:
+                # Crear el nuevo usuario si no hay conflictos
+                usuario_nuevo = Usuario(
+                    username=username,
+                    password=password,
+                    email=email,
+                    nombre=nombre,
+                    apellidos=apellidos,
+                )
+                usuario_nuevo.set_password(password)
+                usuario_nuevo.save()
+                # Iniciar sesión al usuario recién registrado
+                login(request, usuario_nuevo)
+                return redirect('bienvenida')
+        except IntegrityError as e:
+            error_message = "Ha ocurrido un error durante el registro. Por favor, inténtalo nuevamente."
+        
+        return render(request, 'StoreGames/html/registro.html', {'error_message': error_message})
+    
     return render(request, 'StoreGames/html/registro.html')
 
 
 
-#vista para recuperar
-def recuperar(request):
-    return render(request,'StoreGames/html/recuperar.html')
-
-#vista para panel_control_admi
-def panel_control_admi(request):
-    return render(request,'StoreGames/html/panel_control_admi.html')
-
-#vista para ingresar contenido
-def ingresarcontenido(request):
-    return render(request,'StoreGames/html/ingresarcontenido.html')
-
-def perfilusuario(request):
-    return render(request,'StoreGames/html/usuario_perfil.html')
-
-#vista para ingresar
-def login_view(request):
+#VISTA DE INICAR SESION
+def iniciar_sesion(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        # Intenta autenticar al usuario por nombre de usuario
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            login(request, user)
-            
-            return redirect('index')  
+        username = request.POST['user']
+        password = request.POST['pass']
+        usuario = authenticate(request, username=username, password=password)
+        if usuario is not None:
+            login(request, usuario)
+            return redirect('index')
         else:
             error_message = "Nombre de usuario o contraseña incorrectos."
             return render(request, 'StoreGames/html/login.html', {'error_message': error_message})
-
     return render(request, 'StoreGames/html/login.html')
-
-
-#vista para ver perfil
-
-@login_required
-def ver_perfil(request):
-    usuario = request.user
-    return render(request, 'StoreGames/html/ver_perfil.html', {'usuario': usuario})

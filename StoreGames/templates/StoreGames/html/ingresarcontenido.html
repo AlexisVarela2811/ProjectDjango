@@ -45,27 +45,19 @@
         </div>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'logout' %}">Cerrar sesión</a>
-                        <p class="nombre-usuario">Bienvenido, {{ user.username }} </p>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link registro" href="{% url 'ver_perfil' %}">Perfil</a>
-                  </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'login' %}">Inicio de Sesión</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
-                    </li>
-                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'login' %}">Inicio de Sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link registro" href="{% url 'panel_control_admi' %}" class="registro">Panel De Control</a>
+              </li>
             </ul>
         </div>
     </div>
-</nav>
-
+  </nav>
 
     <main class="container">
         <form action="#" method="post" enctype="multipart/form-data" id="formularioingresocontenido">

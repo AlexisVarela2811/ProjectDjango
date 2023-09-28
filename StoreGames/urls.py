@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
+from .views import iniciar_sesion
 from django.contrib.auth import views as auth_views
+from .models import Usuario
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -14,12 +16,14 @@ urlpatterns = [
     path('shooter/', views.shooter, name="shooter"),
     path('registro/', views.registro, name="registro"), 
     path('recuperar/', views.recuperar, name="recuperar"),
+    path('registrar/', views.registrar_usuario, name='registrar_usuario'),
+    path('editarperfil/', views.editar_perfil, name='editarperfil'),
     path('panel_control_admi/', views.panel_control_admi, name="panel_control_admi"),
     path('logout/', auth_views.LogoutView.as_view(next_page='cierresesion'), name='logout'),
     path('ingresarcontenido/', views.ingresarcontenido, name="ingresarcontenido"),
-    path('usuario_perfil/', views.perfilusuario, name="usuario_perfil"),
-    path('login/', views.login_view, name='login'),
-    path('ver_perfil/', views.ver_perfil, name='ver_perfil'),
-    path('perfilvisualizar/', views.perfilvisualizar, name='perfilvisualizar'),
-    
+    path('editar/', views.editar, name="editar"),
+    path('loginc/', views.loginc, name='loginc'),
+    path('login/', views.iniciar_sesion, name='iniciar_sesion'), 
+    path('cambio_contra/', views.cambio_contra, name='cambio_contra'),
+    path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'), 
 ]
