@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-7b5#%wqaamxb58vg1a_%zp7j=1833c&h!zul^+1^rhl@u1yz7!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'StoreGames.Usuario'
 
 
 # Application definition
@@ -93,11 +94,14 @@ DATABASES = {
             'TBLSPACE': 'default_test_tbls',
             'TBLSPACE_TMP': 'default_test_tbls_tmp',
         },
-        'HOST': '192.168.1.141',  # Dirección IP del servidor
-        'PORT': '1521',  # Puerto de escucha de Oracle
+        'HOST': '192.168.1.141', 
+        'PORT': '1521', 
     },
     # ...
 }
+AUTH_USER_MODEL = 'StoreGames.Usuario'
+
+
 
 
 # Password validation
