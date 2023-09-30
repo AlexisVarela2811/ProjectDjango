@@ -61,7 +61,7 @@
                 <a class="nav-link registro" href="{% url 'logout' %}">Cerrar sesión</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link registro" href="{% url 'carro_compra' %}">Carro de compra</a>
+              <a class="nav-link registro" href="{% url 'carrito' %}">Carro de compra</a>
           </li>
             {% else %}
                 <li class="nav-item">
@@ -87,22 +87,66 @@
                     <p class="gametxt">{{ producto.descripcionProducto }}</p>
                     <p class="gametxt">Precio: ${{ producto.precioProducto }}</p>
                     <p class="gametxt">Stock disponible: {{ producto.stockProd }}</p>
-                    <div class="input-group mb-3">
-                        <button class="btn btn-outline-secondary" type="button">-</button>
-                        <input type="text" class="form-control text-center" value="1" readonly>
-                        <button class="btn btn-outline-secondary" type="button">+</button>
-                    </div>
-                    <button class="btn btn-primary">Añadir al carrito</button>
+                    
+                    <!-- Formulario para agregar al carrito -->
+                    <form method="post" action="{% url 'agregar_al_carrito' producto.idProducto %}">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <button class="btn btn-outline-secondary" type="button" id="restarCantidad">-</button>
+                            <input type="text" class="form-control text-center" name="cantidad" value="1" readonly>
+                            <button class="btn btn-outline-secondary" type="button" id="sumarCantidad">+</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+                    </form>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
 
+    
     <a href="{% url 'index' %}" class="boton_volver d-block text-center mt-4">BACK</a>
+    <script src="{% static 'StoreGames/js/carrito.js' %}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
+    
+    <form method="post" id="csrf-form">
+        {% csrf_token %}
+    </form>
 </body>
+
+</html>
+
+</div>
+<a href="{% url 'index' %}" class="boton_volver d-block text-center mt-4">BACK</a>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+
+    <!-- Modal para mostrar mensajes -->
+    {% if messages %}
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Mensaje</h5>
+                </div>
+                <div class="modal-body">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var messageModal = new bootstrap.Modal(document.getElementById('messageModal'), {});
+        messageModal.show();
+
+    </script>
+    
+    {% endif %}
+</body>
+
 </html>
