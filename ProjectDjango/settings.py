@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'ProjectDjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'xe',  # Nombre del servicio o SID
+        'NAME': 'xe',  
         'USER': 'c##django',
         'PASSWORD': 'OracleCloud123',
         'TEST': {
