@@ -39,9 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-# Agruego aplicacion StoreGames
+    # Agrego aplicacion StoreGames
+    'rest_api',
     'StoreGames',
+    'rest_framework',
 ]
+
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -101,6 +104,8 @@ DATABASES = {
 }
 AUTH_USER_MODEL = 'StoreGames.Usuario'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
