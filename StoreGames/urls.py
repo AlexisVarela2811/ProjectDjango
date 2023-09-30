@@ -3,6 +3,9 @@ from . import views
 from .views import iniciar_sesion
 from django.contrib.auth import views as auth_views
 from .models import Usuario
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -25,5 +28,11 @@ urlpatterns = [
     path('loginc/', views.loginc, name='loginc'),
     path('login/', views.iniciar_sesion, name='iniciar_sesion'), 
     path('cambio_contra/', views.cambio_contra, name='cambio_contra'),
-    path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'), 
+    path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
+    path('carrito_compras/', views.carrito_compras, name='carrito_compras'),
+    path('carro_compra/', views.carro_compra, name='carro_compra'),
 ]
+
+#esto es para guardar imagenes en BD
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,108 +6,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Games | CARRERAS</title>
+    <title>Store Games</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'StoreGames/css/style.css' %}">
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-        crossorigin="anonymous"
-    />
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light custom-navbar-bg">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">
-                <h1 class="logo">Store Games</h1>
-            </a>
-            <!-- Botón para dispositivos pequeños -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light custom-navbar-bg">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <h1 class="logo">Store Games</h1>
+        </a>
+        <!-- Botón para dispositivos pequeños -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Contenido del Navbar -->
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'aventura' %}">Aventura</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'shooter' %}">Shooter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'carreras' %}">Carreras</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'deportes' %}">Deportes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'rol' %}">Rol</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    {% if user.is_authenticated %}
-                    <li class="nav-item">
-                      <p class="pt-2 nombre-usuario h6">Bienvenido, {{ user.username }}</p>
-                    </li>
-                    <li class="nav-item">
-                       <a class="nav-link registro" href="{% url 'editarperfil' %}">Editar Perfil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'cambio_contra' %}">Cambio de Contraseña</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link registro" href="{% url 'logout' %}">Cerrar sesión</a>
-                    </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link registro" href="{% url 'loginc' %}">Inicio de Sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Contenido del Navbar -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'aventura' %}">Aventura</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'shooter' %}">Shooter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'carreras' %}">Carreras</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'deportes' %}">Deportes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'rol' %}">Rol</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <p class="pt-2 nombre-usuario h6">Bienvenido, {{ user.username }}</p>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link registro" href="{% url 'editarperfil' %}">Editar Perfil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link registro" href="{% url 'cambio_contra' %}">Cambio de Contraseña</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link registro" href="{% url 'logout' %}">Cerrar sesión</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link registro" href="{% url 'carro_compra' %}">Carro de compra</a>
+          </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'loginc' %}">Inicio de Sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link registro" href="{% url 'registro' %}">Registro</a>
+                </li>
+            {% endif %}
+        </ul>
+        </div>
+    </div>
+</nav>
 
     <h2 class="txtcarrera text-center">CARRERAS</h2>
 
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            {% for producto in productos %}
+            <div class="col-md-6 col-12">
                 <div class="game gameSpacing">
-                    <img src="{% static 'StoreGames/img/Forza.jpg' %}" alt="adventure camp" class="img-fluid">
-                    <p class="gametxt">Forza Horizon 5</p>
-                    <p class="gametxt">
-                        ¡Tu aventura definitiva en Horizon te espera! Explora paisajes dinámicos y
-                        en constante evolución del mundo abierto de México con una acción de conducción
-                        ilimitada y divertida en cientos de los mejores coches del mundo.
-                        Esta es tu aventura Horizon
-                        Lidera impresionantes expediciones a través de los paisajes dinámicos y en constante evolución
-                        del mundo abierto de México con una acción de conducción ilimitada y divertida en cientos de
-                        los mejores coches del mundo.
-                    </p>
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombreProducto }}" class="img-fluid">
+                    <p class="gametxt">{{ producto.nombreProducto }}</p>
+                    <p class="gametxt">{{ producto.descripcionProducto }}</p>
+                    <p class="gametxt">Precio: ${{ producto.precioProducto }}</p>
+                    <p class="gametxt">Stock disponible: {{ producto.stockProd }}</p>
+                    <div class="input-group mb-3">
+                        <button class="btn btn-outline-secondary" type="button">-</button>
+                        <input type="text" class="form-control text-center" value="1" readonly>
+                        <button class="btn btn-outline-secondary" type="button">+</button>
+                    </div>
+                    <button class="btn btn-primary">Añadir al carrito</button>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="game">
-                    <img src="{% static 'StoreGames/img/EuroTruck.jpg' %}" alt="adventure camp" class="img-fluid">
-                    <p class="gametxt">Euro Truck Simulator 2</p>
-                    <p class="gametxt">
-                        ¡Viaja por Europa como el rey de la carretera, un camionero que entrega carga importante a través
-                        de distancias impresionantes! Con docenas de ciudades para explorar desde el Reino Unido,
-                        Bélgica, Alemania, Italia, los Países Bajos, Polonia y muchas más, tu resistencia,
-                        habilidad y velocidad llegarán al límite. Si tienes lo que se necesita para ser parte de una
-                        fuerza de camiones de élite, ¡ponte al volante y demuéstralo!
-                    </p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 

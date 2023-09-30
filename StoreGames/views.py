@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-
+from .models import Producto
 
 
 
@@ -22,19 +22,47 @@ def index_admin(request):
     return render(request, 'StoreGames/index_admin.html')
 
 def aventura(request):
-    return render(request, 'StoreGames/html/aventura.html')
+    productos = Producto.objects.filter(categoria_id=1)
+    
+    context = {
+        'productos': productos
+    }
+    return render(request, 'StoreGames/html/aventura.html', context)
+
 
 def carreras(request):
-    return render(request, 'StoreGames/html/carreras.html')
+    productos = Producto.objects.filter(categoria_id=3)
+    
+    context = {
+        'productos': productos
+    }
+    return render(request, 'StoreGames/html/carreras.html', context)
 
 def deportes(request):
-    return render(request, 'StoreGames/html/deportes.html')
+    productos = Producto.objects.filter(categoria_id=4)
+    
+    context = {
+        'productos': productos
+    }
+
+    return render(request, 'StoreGames/html/deportes.html', context)
 
 def rol(request):
-    return render(request, 'StoreGames/html/rol.html')
+    productos = Producto.objects.filter(categoria_id=5)
+    
+    context = {
+        'productos': productos
+    }
+    return render(request, 'StoreGames/html/rol.html',context)
 
 def shooter(request):
-    return render(request, 'StoreGames/html/shooter.html')
+    productos = Producto.objects.filter(categoria_id=2)
+    
+    context = {
+        'productos': productos
+    }
+
+    return render(request, 'StoreGames/html/shooter.html', context)
 
 def editar(request):
     return render(request, 'StoreGames/html/editar_perfil.html')
@@ -57,6 +85,9 @@ def registro(request):
 
 def cambio_contra(request):
     return render(request, 'StoreGames/html/cambio_contrasena.html')
+
+def carro_compra(request):
+    return render(request, 'StoreGames/html/carrito.html')
 
 
 @login_required
@@ -127,10 +158,6 @@ def cambiar_contrasena(request):
 
 
 
-
-
-
-
 #VISTA DE REGISTRAR USUARIO
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -150,7 +177,7 @@ def registrar_usuario(request):
             elif existing_email:
                 error_message = "El correo electrónico ya está en uso. Por favor, utiliza otro."
             else:
-                # Crear el nuevo usuario si no hay conflictos
+                
                 usuario_nuevo = Usuario(
                     username=username,
                     password=password,
@@ -185,3 +212,28 @@ def iniciar_sesion(request):
             error_message = "Nombre de usuario o contraseña incorrectos."
             return render(request, 'StoreGames/html/login.html', {'error_message': error_message})
     return render(request, 'StoreGames/html/login.html')
+
+
+
+
+def carrito_compras(request):
+   
+    carrito = request.session.get('carrito', {})
+    
+
+    productos_en_carrito = Producto.objects.filter(idProducto__in=carrito.keys())
+    
+    total = 0
+    for producto in productos_en_carrito:
+        producto.cantidad = carrito[str(producto.idProducto)]
+        producto.subtotal = producto.precioProducto * producto.cantidad
+        total += producto.subtotal
+    
+    return render(request, 'carrito.html', {'productos_en_carrito': productos_en_carrito, 'total': total})
+
+
+
+
+
+
+
