@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.utils import timezone
 
+
 class UsuarioManager(BaseUserManager):
     def create_user(self, username, email, password=None):
         if not email:
@@ -88,3 +89,15 @@ class Detalle (models.Model):
     producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
     def __str__(self):
         return self.subTotal
+
+
+
+
+class Carrito(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=0)
+    precio_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+
+    def __str__(self):
+        return f"{self.usuario} - {self.producto} - Cantidad: {self.cantidad} - Precio Total: {self.precio_total}"

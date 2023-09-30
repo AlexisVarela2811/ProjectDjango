@@ -11,6 +11,12 @@ body {
 }
 
 
+.card-custom {
+    background-color: black;
+    color: white;
+    }
+
+
 
 
 .custom-navbar-bg {
@@ -52,6 +58,32 @@ nav .navbar-nav .nav-item a.registro {
     font-family: Helvetica, Arial, sans-serif;
     margin: 20px 0; 
     -webkit-text-stroke: 3px rgb(255, 0, 0);
+}
+
+
+h1 {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    font-size: 400%;
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 20px 0; 
+}
+
+.textopequeno {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    font-size: 100%;
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 20px 0; 
+}
+
+.txtcarrito {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    font-size: 300%;
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 20px 0; 
+   
 }
 
 .txtcarrera {

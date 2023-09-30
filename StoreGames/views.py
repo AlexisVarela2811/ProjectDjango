@@ -4,9 +4,12 @@ from .models import Usuario
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.contrib.auth import update_session_auth_hash
-from django.contrib import messages
 from .models import Producto
-
+from .models import Carrito
+from django.http import JsonResponse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
 
 
 def index(request):
@@ -67,6 +70,9 @@ def shooter(request):
 def editar(request):
     return render(request, 'StoreGames/html/editar_perfil.html')
 
+def realizar_pedido(request):
+    return render(request, 'StoreGames/html/realizar_pedido.html')
+
 def loginc(request):
     return render(request, 'StoreGames/html/login.html')
 
@@ -86,10 +92,20 @@ def registro(request):
 def cambio_contra(request):
     return render(request, 'StoreGames/html/cambio_contrasena.html')
 
-def carro_compra(request):
-    return render(request, 'StoreGames/html/carrito.html')
+def compra_finalizada(request):
+    return render(request, 'StoreGames/html/compra_finalizada.html')
 
 
+#CARRITO
+def carrito(request):
+  
+    carrito_items = Carrito.objects.filter(usuario=request.user)
+    context = {
+        'carrito_items': carrito_items,
+    }
+    return render(request, 'StoreGames/html/carrito.html', context)
+
+#EDITAR PERFIL
 @login_required
 def editar_perfil(request):
     if request.method == 'POST':
@@ -100,7 +116,7 @@ def editar_perfil(request):
         nuevo_username = request.POST['usuario']
 
         try:
-            # Verificar si el usuario o el correo ya existen
+           
             existing_user = Usuario.objects.exclude(pk=usuario.pk).filter(username=nuevo_username).exists()
             existing_email = Usuario.objects.exclude(pk=usuario.pk).filter(email=email).exists()
 
@@ -124,7 +140,7 @@ def editar_perfil(request):
 
     return render(request, 'StoreGames/html/editar_perfil.html')
 
-
+#CAMBIAR CONTRASENA
 @login_required
 def cambiar_contrasena(request):
     if request.method == 'POST':
@@ -133,14 +149,12 @@ def cambiar_contrasena(request):
         nueva_contrasena = request.POST['nueva_contrasena']
         verificacion_contrasena = request.POST['verificacion_contrasena']
 
-        try:
-            # Verificar la contraseña antigua antes de cambiarla
+        try: 
             if usuario.check_password(contrasena_antigua):
-                # Verificar si la nueva contraseña y la verificación coinciden
                 if nueva_contrasena == verificacion_contrasena:
                     usuario.set_password(nueva_contrasena)
                     usuario.save()
-                    update_session_auth_hash(request, usuario)  # Actualizar la sesión para evitar cierres de sesión
+                    update_session_auth_hash(request, usuario)  
                     messages.success(request, 'Contraseña cambiada exitosamente.')
                     return redirect('cambiar_contrasena')
                 else:
@@ -157,7 +171,6 @@ def cambiar_contrasena(request):
 
 
 
-
 #VISTA DE REGISTRAR USUARIO
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -168,7 +181,7 @@ def registrar_usuario(request):
         password = request.POST['pass']
         
         try:
-            # Verificar si el usuario o el correo ya existen
+           
             existing_user = Usuario.objects.filter(username=username).exists()
             existing_email = Usuario.objects.filter(email=email).exists()
             
@@ -199,7 +212,7 @@ def registrar_usuario(request):
 
 
 
-#VISTA DE INICAR SESION
+# INICAR SESION
 def iniciar_sesion(request):
     if request.method == 'POST':
         username = request.POST['user']
@@ -215,25 +228,64 @@ def iniciar_sesion(request):
 
 
 
+#AGREGAR UNIDADES AL CARRITO
 
-def carrito_compras(request):
-   
-    carrito = request.session.get('carrito', {})
+def agregar_al_carrito(request, producto_id):
+    producto = Producto.objects.get(pk=producto_id)
+
+    if request.user.is_authenticated:
+        cantidad = int(request.POST.get('cantidad', 1))
+
+        if cantidad <= producto.stockProd:
+            precio_total = producto.precioProducto * cantidad
+            carrito, created = Carrito.objects.get_or_create(usuario=request.user, producto=producto)
+
+            if (carrito.cantidad + cantidad) <= producto.stockProd:
+                carrito.cantidad += cantidad
+                carrito.precio_total = precio_total
+                carrito.save()
+                messages.success(request, "Producto agregado al carrito correctamente.")
+            else:
+                messages.error(request, "La cantidad solicitada supera el stock disponible en el carrito.")
+        else:
+            messages.error(request, "La cantidad solicitada supera el stock disponible.")
+    else:
+        messages.warning(request, "Debes iniciar sesión para agregar productos al carrito.")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) # se regresa a la misma pagian donde esta
+
+
+
+#FUNCIONP QUITAR STOCK EN CARRITO
+def disminuir_unidad(request, carrito_id):
+    item = Carrito.objects.get(id=carrito_id, usuario=request.user)
+    if item.cantidad > 1:  # Si hay más de una unidad, disminuye
+        item.cantidad -= 1
+        item.precio_total -= item.producto.precioProducto  #
+        item.save()
+    else:  
+        item.delete()
+    return redirect('carrito')
+
+#FUNCION PARA VACIAR CARRITO
+def vaciar_carrito(request):
+    Carrito.objects.filter(usuario=request.user).delete()
+    return redirect('carrito')
+
+
+
+
+
+#FUNCION PARA FINALIZAR COMPRA
+def finalizar_compra(request):
+    carrito_items = Carrito.objects.filter(usuario=request.user)
+
+    for item in carrito_items:
+        producto = item.producto
+        producto.stockProd -= item.cantidad
+        producto.save()
+
     
+    carrito_items.delete()
 
-    productos_en_carrito = Producto.objects.filter(idProducto__in=carrito.keys())
-    
-    total = 0
-    for producto in productos_en_carrito:
-        producto.cantidad = carrito[str(producto.idProducto)]
-        producto.subtotal = producto.precioProducto * producto.cantidad
-        total += producto.subtotal
-    
-    return render(request, 'carrito.html', {'productos_en_carrito': productos_en_carrito, 'total': total})
-
-
-
-
-
-
-
+    return redirect('compra_finalizada')  

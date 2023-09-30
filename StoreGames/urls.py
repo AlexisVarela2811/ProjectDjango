@@ -29,8 +29,13 @@ urlpatterns = [
     path('login/', views.iniciar_sesion, name='iniciar_sesion'), 
     path('cambio_contra/', views.cambio_contra, name='cambio_contra'),
     path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
-    path('carrito_compras/', views.carrito_compras, name='carrito_compras'),
-    path('carro_compra/', views.carro_compra, name='carro_compra'),
+    path('carrito/', views.carrito, name='carrito'),
+    path('agregar_al_carrito/<int:producto_id>/', views.agregar_al_carrito, name='agregar_al_carrito'),
+    path('realizar_pedido/', views.realizar_pedido, name='realizar_pedido'),
+    path('carrito/disminuir/<int:carrito_id>/', views.disminuir_unidad, name='disminuir_unidad'),
+    path('carrito/vaciar/', views.vaciar_carrito, name='vaciar_carrito'),
+    path('carrito/finalizar/', views.finalizar_compra, name='finalizar_compra'),
+    path('compra_finalizada/', views.compra_finalizada, name='compra_finalizada'),
 ]
 
 #esto es para guardar imagenes en BD
