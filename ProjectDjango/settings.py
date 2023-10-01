@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-7b5#%wqaamxb58vg1a_%zp7j=1833c&h!zul^+1^rhl@u1yz7!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'StoreGames.Usuario'
 
 
 # Application definition
@@ -38,9 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-# Agruego aplicacion StoreGames
+    # Agrego aplicacion StoreGames
+    'rest_api',
     'StoreGames',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'captcha',
 ]
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+LOGIN_URL = '/shooter/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,7 +81,14 @@ TEMPLATES = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
 WSGI_APPLICATION = 'ProjectDjango.wsgi.application'
+
 
 
 # Database
@@ -79,7 +97,7 @@ WSGI_APPLICATION = 'ProjectDjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': '127.0.0.1:1521/xe',
+        'NAME': 'xe',  
         'USER': 'c##django',
         'PASSWORD': 'OracleCloud123',
         'TEST': {
@@ -87,8 +105,17 @@ DATABASES = {
             'TBLSPACE': 'default_test_tbls',
             'TBLSPACE_TMP': 'default_test_tbls_tmp',
         },
+        'HOST': '192.168.1.220', 
+        'PORT': '1521', 
     },
+    # ...
 }
+AUTH_USER_MODEL = 'StoreGames.Usuario'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -119,7 +146,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
+                                                        
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -131,3 +158,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+RECAPTCHA_PUBLIC_KEY = '6LfxrGooAAAAAKL6KSWwV3XCVwOLDXQLkNrHquqV'
+RECAPTCHA_PRIVATE_KEY = '6LfxrGooAAAAAAZX1lgSKeFjKZ1s4INgXReeBuXJ'

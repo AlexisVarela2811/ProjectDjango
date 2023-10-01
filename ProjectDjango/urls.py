@@ -19,7 +19,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('StoreGames.urls')) 
+    path('',include('StoreGames.urls')), 
+    path('api/',include('rest_api.urls')),
 ]
 
 admin.site.site_header = "Administracion StoreGames"
