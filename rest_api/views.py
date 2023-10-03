@@ -7,9 +7,12 @@ from django.views.decorators.csrf import csrf_exempt
 from StoreGames.models import Categoria,Detalle
 from .serializers import CategoriaSerializers, DetalleSerializers
 # Create your views here.
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated,))
 def lista_categoria(request):
     if request.method == 'GET':
         categorias = Categoria.objects.all()
@@ -24,6 +27,7 @@ def lista_categoria(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes((IsAuthenticated,))
 def vista_categoria(request, id):
     try:
         categoria = Categoria.objects.get(idCategoria=id)
@@ -47,6 +51,7 @@ def vista_categoria(request, id):
 # Vistas para Detalles
 
 @api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated,))
 def lista_detalle(request):
     if request.method == 'GET':
         detalles = Detalle.objects.all()
@@ -61,6 +66,7 @@ def lista_detalle(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes((IsAuthenticated,))
 def vista_detalle(request, id):
     try:
         detalle = Detalle.objects.get(idDetalle=id)

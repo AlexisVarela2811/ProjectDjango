@@ -23,8 +23,6 @@ def cierresesion(request):
 def bienvenida(request):
     return render(request, 'StoreGames/html/bienvenida.html')
 
-def index_admin(request):
-    return render(request, 'StoreGames/index_admin.html')
 
 def aventura(request):
     productos = Producto.objects.filter(categoria_id=1)
@@ -78,16 +76,6 @@ def realizar_pedido(request):
 
 def loginc(request):
     return render(request, 'StoreGames/html/login.html')
-
-def recuperar(request):
-    return render(request, 'StoreGames/html/recuperar.html')
-
-def panel_control_admi(request):
-    return render(request, 'StoreGames/html/panel_control_admi.html')
-
-def ingresarcontenido(request):
-    return render(request, 'StoreGames/html/ingresarcontenido.html')
-
 
 def registro(request):
     return render(request, 'StoreGames/html/registro.html')

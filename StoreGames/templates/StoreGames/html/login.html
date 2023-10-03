@@ -83,17 +83,13 @@
                   <input type="checkbox" class="form-check-input" id="formCheck">
                   <label for="formCheck" class="form-check-label"><small>Recordar</small></label>
                 </div>
-                <div class="forgot">
-                  <small><a href="{% url 'recuperar' %}">Olvidaste tu contraseña?</a></small>
-                </div>
               </div>
               <div class="mb-3">
                 <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Iniciar sesión</button>
               </div>
               <div class="mb-3">
                 <button id="loginbtn" class="btn btn-lg btn-light w-100 fs-6">
-                  <img src="{% static 'StoreGames/img/google.png' %}" class="me-2" style="width:20px">
-                  <small>Inicio de sesión con Google</small>
+                  <img src="{% static 'StoreGames/img/google.png' %}" class="me-2" style="width:20px"><a href="{% url 'social:begin' 'google-oauth2' %}">Inicio de sesión con Google</a>
                 </button>
               </div>
               <div class="row">
