@@ -37,6 +37,7 @@ def login(request):
 
 #vista para registro
 def registro(request):
+    usuariosave = Usuario.objects.all()
     return render(request,'StoreGames/html/registro.html')
 
 #vista para recuperar
@@ -53,4 +54,5 @@ def ingresarcontenido(request):
 
 def perfilusuario(request):
     return render(request,'StoreGames/html/usuario_perfil.html')
+
 
