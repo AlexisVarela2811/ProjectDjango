@@ -16,7 +16,7 @@
 <nav class="navbar navbar-expand-lg navbar-light custom-navbar-bg">
   <div class="container">
       <a class="navbar-brand" href="{% url 'index' %}">
-          <h1 class="logo">Store Games</h1>
+          <h3 class="logo">Store Games</h3>
       </a>
       <!-- Botón para dispositivos pequeños -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -125,7 +125,9 @@
                 <div class="formulario__mensaje-error d-none" id="formulario__mensaje-error">
                     <p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
                 </div>
-                
+                <div class="input-group mb-3">
+                    <div class="g-recaptcha" data-sitekey="6LfxrGooAAAAAKL6KSWwV3XCVwOLDXQLkNrHquqV"></div>
+                </div>
                 <button type="reset" class="btn btn-danger mb-3" id="resetForm">Limpiar</button>
     
                 <div class="formulario__grupo formulario__grupo-btn-enviar">
@@ -153,5 +155,6 @@
     }
 </script>
 <script src="{% static 'StoreGames/js/validaciones.js' %}"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>
