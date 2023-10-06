@@ -17,6 +17,26 @@ body {
     }
 
 
+ 
+
+    .black-background-table {
+        background-color: black ;
+        color: white ; 
+    }
+    
+    .black-background-table thead th {
+        background-color: #333 ;  
+        color: white ;
+    }
+    
+    .black-background-table tbody tr:nth-child(even) {
+        background-color: #222 ;
+    }
+    
+
+
+
+
 
 
 .custom-navbar-bg {
