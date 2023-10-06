@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
-
+from decimal import Decimal
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, username, email, password=None):
@@ -60,7 +60,6 @@ class Producto(models.Model):
     descripcionProducto = models.CharField(max_length=900, verbose_name="Descripcion del Producto", null=False, blank=False)
     stockProd = models.IntegerField(verbose_name="Stock del Producto", null=False, blank=False)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
-    
     imagen = models.ImageField(upload_to='productos', null=True, blank=True)
 
 

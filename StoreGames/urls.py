@@ -9,7 +9,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('index_admin/', views.index_admin, name="index_admin"),
     path('aventura/', views.aventura, name="aventura"),
     path('bienvenida/', views.bienvenida, name="bienvenida"),
     path('cierresesion/', views.cierresesion, name="cierresesion"),
@@ -18,12 +17,10 @@ urlpatterns = [
     path('rol/', views.rol, name="rol"),
     path('shooter/', views.shooter, name="shooter"),
     path('registro/', views.registro, name="registro"), 
-    path('recuperar/', views.recuperar, name="recuperar"),
     path('registrar/', views.registrar_usuario, name='registrar_usuario'),
-    path('editarperfil/', views.editar_perfil, name='editarperfil'),
-    path('panel_control_admi/', views.panel_control_admi, name="panel_control_admi"),
+     path('editarperfil/', views.editar_perfil, name='editarperfil'),
+
     path('logout/', auth_views.LogoutView.as_view(next_page='cierresesion'), name='logout'),
-    path('ingresarcontenido/', views.ingresarcontenido, name="ingresarcontenido"),
     path('editar/', views.editar, name="editar"),
     path('loginc/', views.loginc, name='loginc'),
     path('login/', views.iniciar_sesion, name='iniciar_sesion'), 
@@ -36,6 +33,8 @@ urlpatterns = [
     path('carrito/vaciar/', views.vaciar_carrito, name='vaciar_carrito'),
     path('carrito/finalizar/', views.finalizar_compra, name='finalizar_compra'),
     path('compra_finalizada/', views.compra_finalizada, name='compra_finalizada'),
+ 
+    path('lista/', views.lista, name='lista'),
 ]
 
 #esto es para guardar imagenes en BD

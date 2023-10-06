@@ -1,15 +1,24 @@
+import json
+import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .models import Usuario
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.contrib.auth import update_session_auth_hash
+from .models import Usuario
 from .models import Producto
 from .models import Carrito
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.shortcuts import render, redirect
+import requests
+import json
+from django.db.utils import IntegrityError
+from django.contrib.auth import login
+from .models import Detalle
+
 
 
 def index(request):
@@ -21,8 +30,6 @@ def cierresesion(request):
 def bienvenida(request):
     return render(request, 'StoreGames/html/bienvenida.html')
 
-def index_admin(request):
-    return render(request, 'StoreGames/index_admin.html')
 
 def aventura(request):
     productos = Producto.objects.filter(categoria_id=1)
@@ -73,18 +80,9 @@ def editar(request):
 def realizar_pedido(request):
     return render(request, 'StoreGames/html/realizar_pedido.html')
 
+
 def loginc(request):
     return render(request, 'StoreGames/html/login.html')
-
-def recuperar(request):
-    return render(request, 'StoreGames/html/recuperar.html')
-
-def panel_control_admi(request):
-    return render(request, 'StoreGames/html/panel_control_admi.html')
-
-def ingresarcontenido(request):
-    return render(request, 'StoreGames/html/ingresarcontenido.html')
-
 
 def registro(request):
     return render(request, 'StoreGames/html/registro.html')
@@ -94,6 +92,9 @@ def cambio_contra(request):
 
 def compra_finalizada(request):
     return render(request, 'StoreGames/html/compra_finalizada.html')
+
+def lista (request):
+    return render(request, 'StoreGames/html/lista_detalles.html')
 
 
 #CARRITO
@@ -108,15 +109,18 @@ def carrito(request):
 #EDITAR PERFIL
 @login_required
 def editar_perfil(request):
+    usuario = request.user
+    
+    # Recuperar los detalles asociados con el usuario actualmente autenticado
+    detalles = Detalle.objects.filter(venta__usuario=usuario)
+
     if request.method == 'POST':
-        usuario = request.user
         nombre = request.POST['nombre']
         apellidos = request.POST['apellidos']
         email = request.POST['email']
         nuevo_username = request.POST['usuario']
 
-        try:
-           
+        try:           
             existing_user = Usuario.objects.exclude(pk=usuario.pk).filter(username=nuevo_username).exists()
             existing_email = Usuario.objects.exclude(pk=usuario.pk).filter(email=email).exists()
 
@@ -137,8 +141,8 @@ def editar_perfil(request):
             error_message = "Ha ocurrido un error durante la actualización. Por favor, inténtalo nuevamente."
 
         messages.error(request, error_message)
-
-    return render(request, 'StoreGames/html/editar_perfil.html')
+        return redirect('index')
+    return render(request, 'StoreGames/html/editar_perfil.html', {'detalles': detalles})
 
 #CAMBIAR CONTRASENA
 @login_required
@@ -172,6 +176,7 @@ def cambiar_contrasena(request):
 
 
 #VISTA DE REGISTRAR USUARIO
+
 def registrar_usuario(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
@@ -180,32 +185,42 @@ def registrar_usuario(request):
         username = request.POST['user']
         password = request.POST['pass']
         
-        try:
-           
-            existing_user = Usuario.objects.filter(username=username).exists()
-            existing_email = Usuario.objects.filter(email=email).exists()
-            
-            if existing_user:
-                error_message = "El nombre de usuario ya está en uso. Por favor, elige otro."
-            elif existing_email:
-                error_message = "El correo electrónico ya está en uso. Por favor, utiliza otro."
-            else:
+        captcha_token = request.POST.get("g-recaptcha-response")
+        cap_url = "https://www.google.com/recaptcha/api/siteverify"
+        cap_secret = "6LfxrGooAAAAAAZX1lgSKeFjKZ1s4INgXReeBuXJ"  
+        cap_data = {"secret": cap_secret, "response": captcha_token}
+        cap_server_response = requests.post(url=cap_url, data=cap_data)
+        cap_json = json.loads(cap_server_response.text)
+        if cap_json['success']:
+            try:
+                existing_user = Usuario.objects.filter(username=username).exists()
+                existing_email = Usuario.objects.filter(email=email).exists()
                 
-                usuario_nuevo = Usuario(
-                    username=username,
-                    password=password,
-                    email=email,
-                    nombre=nombre,
-                    apellidos=apellidos,
-                )
-                usuario_nuevo.set_password(password)
-                usuario_nuevo.save()
-                # Iniciar sesión al usuario recién registrado
-                login(request, usuario_nuevo)
-                return redirect('bienvenida')
-        except IntegrityError as e:
-            error_message = "Ha ocurrido un error durante el registro. Por favor, inténtalo nuevamente."
-        
+                if existing_user:
+                    error_message = "El nombre de usuario ya está en uso. Por favor, elige otro."
+                elif existing_email:
+                    error_message = "El correo electrónico ya está en uso. Por favor, utiliza otro."
+                else:
+                    usuario_nuevo = Usuario(
+                        username=username,
+                        password=password,
+                        email=email,
+                        nombre=nombre,
+                        apellidos=apellidos,
+                    )
+                    usuario_nuevo.set_password(password)
+                    usuario_nuevo.save()
+                    
+                    # Establecer el backend en el objeto de usuario y luego iniciar sesión
+                    usuario_nuevo.backend = 'django.contrib.auth.backends.ModelBackend'
+                    login(request, usuario_nuevo)
+                    return redirect('bienvenida')
+            except IntegrityError as e:
+                error_message = "Ha ocurrido un error durante el registro. Por favor, inténtalo nuevamente."
+        else:
+            # La verificación del Captcha falló
+            error_message = "Por favor, completa el Captcha correctamente."
+
         return render(request, 'StoreGames/html/registro.html', {'error_message': error_message})
     
     return render(request, 'StoreGames/html/registro.html')
@@ -217,13 +232,27 @@ def iniciar_sesion(request):
     if request.method == 'POST':
         username = request.POST['user']
         password = request.POST['pass']
-        usuario = authenticate(request, username=username, password=password)
-        if usuario is not None:
-            login(request, usuario)
-            return redirect('index')
+        captcha_token = request.POST.get("g-recaptcha-response")
+
+        # Verificar el Captcha
+        cap_url = "https://www.google.com/recaptcha/api/siteverify"
+        cap_secret = "6LfxrGooAAAAAAZX1lgSKeFjKZ1s4INgXReeBuXJ" 
+        cap_data = {"secret": cap_secret, "response": captcha_token}
+        cap_server_response = requests.post(url=cap_url, data=cap_data)
+        cap_json = json.loads(cap_server_response.text)
+
+        if cap_json['success']:
+            usuario = authenticate(request, username=username, password=password)
+            if usuario is not None:
+                login(request, usuario)
+                return redirect('index')
+            else:
+                error_message = "Nombre de usuario o contraseña incorrectos."
+                return render(request, 'StoreGames/html/login.html', {'error_message': error_message})
         else:
-            error_message = "Nombre de usuario o contraseña incorrectos."
+            error_message = "Por favor, completa el Captcha correctamente."
             return render(request, 'StoreGames/html/login.html', {'error_message': error_message})
+    
     return render(request, 'StoreGames/html/login.html')
 
 
@@ -274,8 +303,6 @@ def vaciar_carrito(request):
 
 
 
-
-
 #FUNCION PARA FINALIZAR COMPRA
 def finalizar_compra(request):
     carrito_items = Carrito.objects.filter(usuario=request.user)
@@ -289,3 +316,5 @@ def finalizar_compra(request):
     carrito_items.delete()
 
     return redirect('compra_finalizada')  
+
+
