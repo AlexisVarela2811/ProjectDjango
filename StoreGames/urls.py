@@ -18,7 +18,8 @@ urlpatterns = [
     path('shooter/', views.shooter, name="shooter"),
     path('registro/', views.registro, name="registro"), 
     path('registrar/', views.registrar_usuario, name='registrar_usuario'),
-    path('editarperfil/', views.editar_perfil, name='editarperfil'),
+     path('editarperfil/', views.editar_perfil, name='editarperfil'),
+
     path('logout/', auth_views.LogoutView.as_view(next_page='cierresesion'), name='logout'),
     path('editar/', views.editar, name="editar"),
     path('loginc/', views.loginc, name='loginc'),
@@ -32,6 +33,8 @@ urlpatterns = [
     path('carrito/vaciar/', views.vaciar_carrito, name='vaciar_carrito'),
     path('carrito/finalizar/', views.finalizar_compra, name='finalizar_compra'),
     path('compra_finalizada/', views.compra_finalizada, name='compra_finalizada'),
+ 
+    path('lista/', views.lista, name='lista'),
 ]
 
 #esto es para guardar imagenes en BD

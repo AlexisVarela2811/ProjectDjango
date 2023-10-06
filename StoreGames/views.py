@@ -12,6 +12,13 @@ from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.shortcuts import render, redirect
+import requests
+import json
+from django.db.utils import IntegrityError
+from django.contrib.auth import login
+from .models import Detalle
+
 
 
 def index(request):
@@ -86,6 +93,9 @@ def cambio_contra(request):
 def compra_finalizada(request):
     return render(request, 'StoreGames/html/compra_finalizada.html')
 
+def lista (request):
+    return render(request, 'StoreGames/html/lista_detalles.html')
+
 
 #CARRITO
 def carrito(request):
@@ -99,15 +109,18 @@ def carrito(request):
 #EDITAR PERFIL
 @login_required
 def editar_perfil(request):
+    usuario = request.user
+    
+    # Recuperar los detalles asociados con el usuario actualmente autenticado
+    detalles = Detalle.objects.filter(venta__usuario=usuario)
+
     if request.method == 'POST':
-        usuario = request.user
         nombre = request.POST['nombre']
         apellidos = request.POST['apellidos']
         email = request.POST['email']
         nuevo_username = request.POST['usuario']
 
-        try:
-           
+        try:           
             existing_user = Usuario.objects.exclude(pk=usuario.pk).filter(username=nuevo_username).exists()
             existing_email = Usuario.objects.exclude(pk=usuario.pk).filter(email=email).exists()
 
@@ -128,8 +141,8 @@ def editar_perfil(request):
             error_message = "Ha ocurrido un error durante la actualización. Por favor, inténtalo nuevamente."
 
         messages.error(request, error_message)
-
-    return render(request, 'StoreGames/html/editar_perfil.html')
+        return redirect('index')
+    return render(request, 'StoreGames/html/editar_perfil.html', {'detalles': detalles})
 
 #CAMBIAR CONTRASENA
 @login_required
@@ -163,6 +176,7 @@ def cambiar_contrasena(request):
 
 
 #VISTA DE REGISTRAR USUARIO
+
 def registrar_usuario(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
@@ -187,7 +201,6 @@ def registrar_usuario(request):
                 elif existing_email:
                     error_message = "El correo electrónico ya está en uso. Por favor, utiliza otro."
                 else:
-                    
                     usuario_nuevo = Usuario(
                         username=username,
                         password=password,
@@ -197,7 +210,9 @@ def registrar_usuario(request):
                     )
                     usuario_nuevo.set_password(password)
                     usuario_nuevo.save()
-                    # Iniciar sesión al usuario recién registrado
+                    
+                    # Establecer el backend en el objeto de usuario y luego iniciar sesión
+                    usuario_nuevo.backend = 'django.contrib.auth.backends.ModelBackend'
                     login(request, usuario_nuevo)
                     return redirect('bienvenida')
             except IntegrityError as e:
@@ -288,8 +303,6 @@ def vaciar_carrito(request):
 
 
 
-
-
 #FUNCION PARA FINALIZAR COMPRA
 def finalizar_compra(request):
     carrito_items = Carrito.objects.filter(usuario=request.user)
@@ -303,3 +316,5 @@ def finalizar_compra(request):
     carrito_items.delete()
 
     return redirect('compra_finalizada')  
+
+
