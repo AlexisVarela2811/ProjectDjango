@@ -4,8 +4,8 @@ const inputs = document.querySelectorAll('.form-control')
 formulario.addEventListener('submit', e => {
     e.preventDefault();  
     
-    if (campos.nombre && campos.apellido && campos.correo && campos.user && campos.fechaNacimiento && campos.pass && campos.pass2 && campos.direccion) {
-        formulario.reset()
+    if (campos.nombre && campos.apellido && campos.correo && campos.user && campos.pass && campos.pass2) {
+        
 
         document.getElementById('formulario__mensaje-exito').classList.remove('d-none')
         setTimeout(() => {
@@ -24,7 +24,7 @@ formulario.addEventListener('submit', e => {
 // mensaje error al click enviar y no esta formulario completo
 document.getElementById('btnEnviar').addEventListener('click', () => {
 
-    if (!campos.nombre || !campos.apellido || !campos.correo || !campos.user || !campos.fechaNacimiento || !campos.pass || !campos.pass2 || !campos.direccion) {
+    if (!campos.nombre || !campos.apellido || !campos.correo || !campos.user || !campos.pass || !campos.pass2) {
         document.getElementById('formulario__mensaje-error').classList.remove('d-none')
         console.log(campos)
 
@@ -50,7 +50,7 @@ const expresiones = {
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     user: /^[a-zA-Z0-9\_\-]{4,16}$/, // Letras, numeros, guion y guion_bajo
     pass: /^(?=.*[A-Z])(?=.*\d).{4,12}$/, // Al menos una letra mayuscula y al menos un numero
-    direccion: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*#).+$/,
+
 }
 
 
@@ -60,10 +60,9 @@ let campos = {
     apellido: false,
     correo: false,
     user: false,
-    fechaNacimiento: false,
     pass: false, 
     pass2: false,
-    direccion: false
+
 }
 
 const validarForm = (e) => {
@@ -93,9 +92,7 @@ const validarForm = (e) => {
             validarPassword2()
         break
 
-        case 'direccion':
-            validarCampo(expresiones.direccion, e.target, 'direccion');   
-        break
+
     }
 }
 
@@ -132,37 +129,11 @@ const validarCampo = (expresion, input, campo) => {
 	}
 }
 
-// validacion fecha nacimineto > 13 años
-const validarFechaNacimineto = () => {
-    const fechaNacimiento = new Date(document.getElementById("fechanacimiento").value);
-    fechaNacimiento.setDate(fechaNacimiento.getDate() +1)
-    const fechaActual = new Date();
 
-    const edadresta = fechaActual - fechaNacimiento;
-    const edadEnAnios = edadresta / (1000 * 60 * 60 * 24 * 365.25); // Se multiplica los cvalores y luego se divide para calcular fecha
-
-    if (edadEnAnios < 13) {
-        document.getElementById('grupo__fechanacimiento').classList.add('formulario__grupo-incorrecto');
-		document.getElementById('grupo__fechanacimiento').classList.remove('formulario__grupo-correcto');
-        document.querySelector('#grupo__fechanacimiento .form-control__error-txt').classList.remove('d-none')
-        campos.fechaNacimiento = false;
-    }else if(edadEnAnios >= 13){
-        document.getElementById('grupo__fechanacimiento').classList.remove('formulario__grupo-incorrecto');
-		document.getElementById('grupo__fechanacimiento').classList.add('formulario__grupo-correcto');
-        document.querySelector('#grupo__fechanacimiento .form-control__error-txt').classList.add('d-none')
-        campos.fechaNacimiento = true;
-    }else{
-        document.getElementById('grupo__fechanacimiento').classList.remove('formulario__grupo-incorrecto');
-		document.getElementById('grupo__fechanacimiento').classList.remove('formulario__grupo-correcto');
-        document.querySelector('#grupo__fechanacimiento .form-control__error-txt').classList.add('d-none')
-    }
-}
 
 // se aplican validaciones al levantar tecla y focus del input
 inputs.forEach((input) => {
     input.addEventListener('keyup', validarForm)
     input.addEventListener('blur', validarForm)
-    input.addEventListener('keyup', validarFechaNacimineto)
-    input.addEventListener('blur', validarFechaNacimineto)
-})
 
+})
