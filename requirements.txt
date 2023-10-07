@@ -12,10 +12,10 @@ cryptography==41.0.4
 cx-Oracle==8.3.0
 defusedxml==0.8.0rc2
 dj-database-url==2.1.0
-Django==4.2.5
+Django>=3.2,<4.0
 django-filter==23.3
 django-recaptcha==3.0.0
-django-simplecaptcha==2.0.0
+django-simplecaptcha==2.5.2
 djangorestframework==3.14.0
 frozenlist==1.4.0
 gunicorn==21.2.0
